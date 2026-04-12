@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Notes — Sameeksha</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --card: #1a1e28;
+    --border: #252a38;
+    --accent: #f7c948;
+    --accent2: #4fc3f7;
+    --accent3: #a78bfa;
+    --accent4: #34d399;
+    --text: #e8eaf0;
+    --muted: #7a809a;
+    --code-bg: #0a0c12;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(135deg, #0d0f14 0%, #12151f 40%, #1a1028 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(247,201,72,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(247,201,72,0.1);
+    border: 1px solid rgba(247,201,72,0.3);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 7vw, 76px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 16px;
+  }
+  .hero-pills {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 32px 36px;
+    margin-bottom: 64px;
+  }
+  .toc h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px 24px;
+  }
+  .toc-item {
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 3px 0;
+    transition: color 0.2s;
+    text-decoration: none;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .toc-item:hover { color: var(--accent); }
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    opacity: 0.6;
+    min-width: 20px;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 64px;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: rgba(247,201,72,0.12);
+    line-height: 1;
+    min-width: 64px;
+    text-align: right;
+    letter-spacing: -2px;
+  }
+  .section-title h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .section-title p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+  .card h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: #c9d1d9;
+    margin: 12px 0;
+  }
+  .comment { color: #555e75; font-style: italic; }
+  .kw { color: var(--accent3); }
+  .str { color: var(--accent4); }
+  .num { color: var(--accent2); }
+  .fn { color: var(--accent); }
+  .bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bullet-list li {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .bullet-list li::before {
+    content: '◆';
+    color: var(--accent);
+    font-size: 7px;
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .data-table th {
+    background: rgba(247,201,72,0.08);
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--text);
+    vertical-align: top;
+  }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .tag {
+    display: inline-block;
+    background: rgba(79,195,247,0.12);
+    color: var(--accent2);
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .tag.green { background: rgba(52,211,153,0.12); color: var(--accent4); }
+  .tag.purple { background: rgba(167,139,250,0.12); color: var(--accent3); }
+  .tag.yellow { background: rgba(247,201,72,0.12); color: var(--accent); }
+
+  /* GRID */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* HIGHLIGHT NOTE */
+  .note {
+    background: rgba(247,201,72,0.06);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 12px;
+    border-radius: 0 4px 4px 0;
+  }
+  .note strong { color: var(--accent); }
+
+  /* BEST PRACTICES */
+  .bp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .bp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 20px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .bp-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .bp-card h5 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .bp-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 48px 24px;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer span { color: var(--accent); }
+
+  /* PILLAR CARDS */
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 640px) { .pillar-grid { grid-template-columns: repeat(2,1fr); } }
+  .pillar-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+  }
+  .pillar-icon { font-size: 22px; margin-bottom: 6px; }
+  .pillar-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .pillar-desc { font-size: 11px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">GitHub Edition · April 2026</div>
+  <h1>Python <span>Notes</span></h1>
+  <div class="hero-sub">Complete Concept-Wise Reference · Crafted by Sameeksha</div>
+  <div class="hero-pills">
+    <span class="pill">🐍 Python 3</span>
+    <span class="pill">Beginner → Intermediate → Advanced</span>
+    <span class="pill">22 Concepts</span>
+    <span class="pill">Code Examples Included</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <div class="toc-grid">
+      <a class="toc-item" href="#s01"><span class="toc-num">01</span>Introduction to Python</a>
+      <a class="toc-item" href="#s02"><span class="toc-num">02</span>Variables & Data Types</a>
+      <a class="toc-item" href="#s03"><span class="toc-num">03</span>Operators</a>
+      <a class="toc-item" href="#s04"><span class="toc-num">04</span>Strings</a>
+      <a class="toc-item" href="#s05"><span class="toc-num">05</span>Lists</a>
+      <a class="toc-item" href="#s06"><span class="toc-num">06</span>Tuples</a>
+      <a class="toc-item" href="#s07"><span class="toc-num">07</span>Sets</a>
+      <a class="toc-item" href="#s08"><span class="toc-num">08</span>Dictionaries</a>
+      <a class="toc-item" href="#s09"><span class="toc-num">09</span>Conditional Statements</a>
+      <a class="toc-item" href="#s10"><span class="toc-num">10</span>Loops</a>
+      <a class="toc-item" href="#s11"><span class="toc-num">11</span>Functions</a>
+      <a class="toc-item" href="#s12"><span class="toc-num">12</span>Lambda Functions</a>
+      <a class="toc-item" href="#s13"><span class="toc-num">13</span>Modules & Packages</a>
+      <a class="toc-item" href="#s14"><span class="toc-num">14</span>File Handling</a>
+      <a class="toc-item" href="#s15"><span class="toc-num">15</span>Exception Handling</a>
+      <a class="toc-item" href="#s16"><span class="toc-num">16</span>OOP</a>
+      <a class="toc-item" href="#s17"><span class="toc-num">17</span>Iterators & Generators</a>
+      <a class="toc-item" href="#s18"><span class="toc-num">18</span>Decorators</a>
+      <a class="toc-item" href="#s19"><span class="toc-num">19</span>Comprehensions</a>
+      <a class="toc-item" href="#s20"><span class="toc-num">20</span>Regular Expressions</a>
+      <a class="toc-item" href="#s21"><span class="toc-num">21</span>Built-in Functions</a>
+      <a class="toc-item" href="#s22"><span class="toc-num">22</span>Standard Libraries</a>
+    </div>
+  </div>
+
+  <!-- 01 INTRO -->
+  <div class="section" id="s01">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div class="section-title">
+        <h3>Introduction to Python</h3>
+        <p>High-level · interpreted · dynamically typed · multi-paradigm</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4>Why Python?</h4>
+      <ul class="bullet-list">
+        <li><strong>Easy to learn</strong> — syntax reads like plain English, minimal boilerplate</li>
+        <li><strong>Interpreted</strong> — executes line-by-line, no separate compile step</li>
+        <li><strong>Dynamically typed</strong> — no explicit type declarations needed</li>
+        <li><strong>Huge ecosystem</strong> — 400,000+ packages on PyPI</li>
+        <li><strong>Cross-platform</strong> — runs on Windows, macOS, Linux without changes</li>
+        <li><strong>Community</strong> — one of the largest programming communities in the world</li>
+      </ul>
+    </div>
+    <pre><span class="comment"># Hello World — your first Python program</span>
+<span class="fn">print</span>(<span class="str">"Hello, Sameeksha! 🐍"</span>)
+
+<span class="comment"># Running Python</span>
+<span class="comment"># python filename.py   → run a script</span>
+<span class="comment"># python3              → open interactive shell (REPL)</span>
+<span class="comment"># python --version     → check installed version</span>
+
+<span class="kw">import</span> sys
+<span class="fn">print</span>(sys.version)   <span class="comment"># prints full version info</span></pre>
+    <div class="note"><strong>Always use Python 3.</strong> Python 2 is end-of-life since 2020. Key differences: print is a function, integer division uses //, strings are Unicode by default.</div>
+  </div>
+
+  <!-- 02 VARIABLES -->
+  <div class="section" id="s02">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div class="section-title">
+        <h3>Variables & Data Types</h3>
+        <p>Dynamically typed containers — no declaration keyword needed</p>
+      </div>
+    </div>
+    <pre>name       = <span class="str">'Sameeksha'</span>   <span class="comment"># str</span>
+age        = <span class="num">21</span>            <span class="comment"># int</span>
+gpa        = <span class="num">9.5</span>           <span class="comment"># float</span>
+is_student = <span class="kw">True</span>          <span class="comment"># bool</span>
+nothing    = <span class="kw">None</span>          <span class="comment"># NoneType</span>
+
+x, y, z = <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>          <span class="comment"># multiple assignment</span>
+x, y = y, x               <span class="comment"># swap (Pythonic!)</span></pre>
+    <div class="card">
+      <h4>Built-in Data Types</h4>
+      <table class="data-table">
+        <tr><th>Type</th><th>Example</th><th>Mutable?</th><th>Description</th></tr>
+        <tr><td>int</td><td>42, -5, 0</td><td><span class="tag">No</span></td><td>Whole numbers, unlimited precision</td></tr>
+        <tr><td>float</td><td>3.14, -0.5</td><td><span class="tag">No</span></td><td>64-bit floating point</td></tr>
+        <tr><td>str</td><td>"hello"</td><td><span class="tag">No</span></td><td>Unicode character sequence</td></tr>
+        <tr><td>bool</td><td>True / False</td><td><span class="tag">No</span></td><td>Subclass of int (True=1)</td></tr>
+        <tr><td>list</td><td>[1, 2, 3]</td><td><span class="tag green">Yes</span></td><td>Ordered, mutable, duplicates OK</td></tr>
+        <tr><td>tuple</td><td>(1, 2, 3)</td><td><span class="tag">No</span></td><td>Ordered, immutable</td></tr>
+        <tr><td>set</td><td>{1, 2, 3}</td><td><span class="tag green">Yes</span></td><td>Unordered, no duplicates</td></tr>
+        <tr><td>dict</td><td>{"k": "v"}</td><td><span class="tag green">Yes</span></td><td>Key-value pairs, ordered (3.7+)</td></tr>
+        <tr><td>NoneType</td><td>None</td><td><span class="tag">No</span></td><td>Represents absence of value</td></tr>
+      </table>
+    </div>
+    <div class="note"><strong>Falsy values:</strong> 0, 0.0, '', [], {}, set(), None, False — everything else is truthy.</div>
+  </div>
+
+  <!-- 03 OPERATORS -->
+  <div class="section" id="s03">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div class="section-title">
+        <h3>Operators</h3>
+        <p>Arithmetic · comparison · logical · assignment · identity · membership</p>
+      </div>
+    </div>
+    <div class="two-col">
+      <pre><span class="comment"># Arithmetic</span>
+x, y = <span class="num">10</span>, <span class="num">3</span>
+x + y    <span class="comment"># 13</span>
+x - y    <span class="comment"># 7</span>
+x * y    <span class="comment"># 30</span>
+x / y    <span class="comment"># 3.333 (float!)</span>
+x // y   <span class="comment"># 3   floor div</span>
+x % y    <span class="comment"># 1   modulus</span>
+x ** y   <span class="comment"># 1000 exponent</span></pre>
+      <pre><span class="comment"># Logical</span>
+<span class="kw">True</span> <span class="kw">and</span> <span class="kw">False</span>  <span class="comment"># False</span>
+<span class="kw">True</span> <span class="kw">or</span> <span class="kw">False</span>   <span class="comment"># True</span>
+<span class="kw">not</span> <span class="kw">True</span>        <span class="comment"># False</span>
+
+<span class="comment"># Chained comparisons</span>
+<span class="num">1</span> < x < <span class="num">20</span>     <span class="comment"># True</span>
+
+<span class="comment"># Walrus (3.8+)</span>
+<span class="kw">if</span> (n := <span class="fn">len</span>([<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>])) > <span class="num">2</span>:
+    <span class="fn">print</span>(n)  <span class="comment"># 3</span></pre>
+    </div>
+  </div>
+
+  <!-- 04 STRINGS -->
+  <div class="section" id="s04">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div class="section-title">
+        <h3>Strings</h3>
+        <p>Immutable, ordered sequence of Unicode characters · rich method library</p>
+      </div>
+    </div>
+    <pre>s = <span class="str">'Sameeksha'</span>
+
+<span class="comment"># Slicing: s[start : stop : step]</span>
+s[<span class="num">0</span>]    <span class="comment"># 'S'      first char</span>
+s[-<span class="num">1</span>]   <span class="comment"># 'a'      last char</span>
+s[<span class="num">0</span>:<span class="num">4</span>]  <span class="comment"># 'Same'   chars 0–3</span>
+s[::-<span class="num">1</span>] <span class="comment"># 'ahskeemaS'  reversed</span>
+
+<span class="comment"># f-strings (recommended, Python 3.6+)</span>
+name, gpa = <span class="str">'Sameeksha'</span>, <span class="num">9.5</span>
+<span class="fn">print</span>(<span class="str">f"Name: {name}, GPA: {gpa:.2f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Upper: {name.upper()}, Sq: {5**2}"</span>)</pre>
+    <div class="card">
+      <h4>Common String Methods</h4>
+      <table class="data-table">
+        <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+        <tr><td>.upper() / .lower()</td><td>str</td><td>Change case</td></tr>
+        <tr><td>.strip() / .lstrip() / .rstrip()</td><td>str</td><td>Remove whitespace/chars</td></tr>
+        <tr><td>.replace(old, new)</td><td>str</td><td>Replace all occurrences</td></tr>
+        <tr><td>.split(sep)</td><td>list</td><td>Split into list of strings</td></tr>
+        <tr><td>.join(iterable)</td><td>str</td><td>Join list into string</td></tr>
+        <tr><td>.find(sub)</td><td>int</td><td>Index of first match, -1 if not found</td></tr>
+        <tr><td>.startswith() / .endswith()</td><td>bool</td><td>Check beginning / end</td></tr>
+        <tr><td>.isdigit() / .isalpha()</td><td>bool</td><td>Check all digits / letters</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 05 LISTS -->
+  <div class="section" id="s05">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div class="section-title">
+        <h3>Lists</h3>
+        <p>Ordered · mutable · heterogeneous · allows duplicates · 0-indexed</p>
+      </div>
+    </div>
+    <pre>fruits = [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+
+<span class="comment"># Add</span>
+fruits.append(<span class="str">'mango'</span>)      <span class="comment"># O(1) — end</span>
+fruits.insert(<span class="num">1</span>, <span class="str">'grape'</span>)   <span class="comment"># O(n) — at index</span>
+fruits.extend([<span class="str">'kiwi'</span>])    <span class="comment"># add multiple</span>
+
+<span class="comment"># Remove</span>
+fruits.remove(<span class="str">'banana'</span>)    <span class="comment"># by value</span>
+fruits.pop()               <span class="comment"># last item</span>
+fruits.pop(<span class="num">0</span>)              <span class="comment"># by index</span>
+
+<span class="comment"># Sort</span>
+fruits.sort()              <span class="comment"># in-place</span>
+<span class="fn">sorted</span>(fruits)             <span class="comment"># returns new list</span>
+
+<span class="comment"># Copy (shallow vs deep)</span>
+copy1 = fruits.copy()
+<span class="kw">import</span> copy; deep = copy.deepcopy(nested)</pre>
+    <div class="note"><strong>Shallow copy</strong> copies the outer list but nested objects are still shared. Use <code>copy.deepcopy()</code> for nested structures.</div>
+  </div>
+
+  <!-- 06 TUPLES -->
+  <div class="section" id="s06">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div class="section-title">
+        <h3>Tuples</h3>
+        <p>Ordered · immutable · hashable · faster and lighter than lists</p>
+      </div>
+    </div>
+    <pre>t = (<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)
+single = (<span class="num">5</span>,)      <span class="comment"># trailing comma required!</span>
+
+<span class="comment"># Unpacking</span>
+a, b, c = (<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>)
+first, *rest = (<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)   <span class="comment"># rest=[2,3,4]</span>
+
+<span class="comment"># Tuple as dict key (hashable)</span>
+location = {(<span class="num">28.61</span>, <span class="num">77.20</span>): <span class="str">'New Delhi'</span>}
+
+<span class="comment"># Named tuple</span>
+<span class="kw">from</span> collections <span class="kw">import</span> namedtuple
+Point = namedtuple(<span class="str">'Point'</span>, [<span class="str">'x'</span>, <span class="str">'y'</span>])
+p = Point(<span class="num">3</span>, <span class="num">4</span>); <span class="fn">print</span>(p.x, p.y)  <span class="comment"># 3 4</span></pre>
+  </div>
+
+  <!-- 07 SETS -->
+  <div class="section" id="s07">
+    <div class="section-header">
+      <div class="section-num">07</div>
+      <div class="section-title">
+        <h3>Sets</h3>
+        <p>Unordered · unique elements · O(1) membership · hash table backed</p>
+      </div>
+    </div>
+    <pre>s = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">3</span>, <span class="num">2</span>}    <span class="comment"># {1, 2, 3} — auto dedup</span>
+empty = <span class="fn">set</span>()          <span class="comment"># NOT {} — that's a dict!</span>
+
+a = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>}; b = {<span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>}
+a | b   <span class="comment"># Union        {1,2,3,4,5,6}</span>
+a & b   <span class="comment"># Intersection {3,4}</span>
+a - b   <span class="comment"># Difference   {1,2}</span>
+a ^ b   <span class="comment"># Symmetric    {1,2,5,6}</span>
+
+{<span class="num">1</span>,<span class="num">2</span>}.issubset({<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>})    <span class="comment"># True</span>
+{<span class="num">1</span>,<span class="num">2</span>}.isdisjoint({<span class="num">3</span>,<span class="num">4</span>})   <span class="comment"># True</span></pre>
+  </div>
+
+  <!-- 08 DICTS -->
+  <div class="section" id="s08">
+    <div class="section-header">
+      <div class="section-num">08</div>
+      <div class="section-title">
+        <h3>Dictionaries</h3>
+        <p>Ordered (3.7+) · mutable · key-value pairs · O(1) lookup · hash map</p>
+      </div>
+    </div>
+    <pre>person = {<span class="str">'name'</span>: <span class="str">'Sameeksha'</span>, <span class="str">'age'</span>: <span class="num">21</span>, <span class="str">'gpa'</span>: <span class="num">9.5</span>}
+
+<span class="comment"># Safe access</span>
+person.get(<span class="str">'phone'</span>, <span class="str">'N/A'</span>)   <span class="comment"># no KeyError</span>
+
+<span class="comment"># Modify</span>
+person[<span class="str">'city'</span>] = <span class="str">'Bengaluru'</span>
+person.update({<span class="str">'age'</span>: <span class="num">22</span>})
+person.setdefault(<span class="str">'country'</span>, <span class="str">'India'</span>)
+person.pop(<span class="str">'gpa'</span>)
+
+<span class="comment"># Iterate</span>
+<span class="kw">for</span> k, v <span class="kw">in</span> person.items():
+    <span class="fn">print</span>(<span class="str">f'{k}: {v}'</span>)</pre>
+  </div>
+
+  <!-- 09 CONDITIONALS -->
+  <div class="section" id="s09">
+    <div class="section-header">
+      <div class="section-num">09</div>
+      <div class="section-title">
+        <h3>Conditional Statements</h3>
+        <p>if / elif / else · ternary · match-case (Python 3.10+)</p>
+      </div>
+    </div>
+    <pre>age = <span class="num">21</span>
+<span class="kw">if</span> age >= <span class="num">18</span>:
+    <span class="fn">print</span>(<span class="str">'Adult'</span>)
+<span class="kw">elif</span> age >= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">'Teenager'</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">'Child'</span>)
+
+<span class="comment"># Ternary</span>
+status = <span class="str">'Adult'</span> <span class="kw">if</span> age >= <span class="num">18</span> <span class="kw">else</span> <span class="str">'Minor'</span>
+
+<span class="comment"># match-case (Python 3.10+)</span>
+<span class="kw">match</span> command:
+    <span class="kw">case</span> <span class="str">'quit'</span>:         <span class="fn">print</span>(<span class="str">'Quitting...'</span>)
+    <span class="kw">case</span> <span class="str">'go'</span> | <span class="str">'run'</span>: <span class="fn">print</span>(<span class="str">'Moving!'</span>)
+    <span class="kw">case</span> _:              <span class="fn">print</span>(<span class="str">'Unknown'</span>)</pre>
+  </div>
+
+  <!-- 10 LOOPS -->
+  <div class="section" id="s10">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title">
+        <h3>Loops</h3>
+        <p>for · while · break · continue · pass · else clause</p>
+      </div>
+    </div>
+    <pre><span class="comment"># for loop</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">10</span>, <span class="num">2</span>):  <span class="comment"># 1,3,5,7,9</span>
+    <span class="fn">print</span>(i)
+
+<span class="comment"># enumerate — index + value</span>
+<span class="kw">for</span> i, val <span class="kw">in</span> <span class="fn">enumerate</span>([<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>], start=<span class="num">1</span>):
+    <span class="fn">print</span>(i, val)
+
+<span class="comment"># zip — iterate multiple</span>
+<span class="kw">for</span> name, score <span class="kw">in</span> <span class="fn">zip</span>(names, scores):
+    <span class="fn">print</span>(<span class="str">f'{name}: {score}'</span>)
+
+<span class="comment"># while loop</span>
+count = <span class="num">0</span>
+<span class="kw">while</span> count < <span class="num">5</span>:
+    count += <span class="num">1</span>
+
+<span class="comment"># for-else (else if no break hit)</span>
+<span class="kw">for</span> n <span class="kw">in</span> [<span class="num">2</span>, <span class="num">3</span>, <span class="num">5</span>, <span class="num">7</span>]:
+    <span class="kw">if</span> n % <span class="num">2</span> == <span class="num">0</span> <span class="kw">and</span> n > <span class="num">2</span>: <span class="kw">break</span>
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">'No even > 2'</span>)</pre>
+  </div>
+
+  <!-- 11 FUNCTIONS -->
+  <div class="section" id="s11">
+    <div class="section-header">
+      <div class="section-num">11</div>
+      <div class="section-title">
+        <h3>Functions</h3>
+        <p>First-class objects · *args · **kwargs · type hints · LEGB scope</p>
+      </div>
+    </div>
+    <pre><span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="str">"""Return a greeting (docstring)."""</span>
+    <span class="kw">return</span> <span class="str">f'Hello, {name}!'</span>
+
+<span class="comment"># Default params</span>
+<span class="kw">def</span> <span class="fn">power</span>(base, exp=<span class="num">2</span>): <span class="kw">return</span> base ** exp
+
+<span class="comment"># *args (tuple) + **kwargs (dict)</span>
+<span class="kw">def</span> <span class="fn">total</span>(*nums): <span class="kw">return</span> <span class="fn">sum</span>(nums)
+<span class="kw">def</span> <span class="fn">profile</span>(**info):
+    <span class="kw">for</span> k, v <span class="kw">in</span> info.items(): <span class="fn">print</span>(<span class="str">f'{k}: {v}'</span>)
+
+<span class="comment"># Type hints</span>
+<span class="kw">def</span> <span class="fn">add</span>(a: int, b: int) -> int: <span class="kw">return</span> a + b
+
+<span class="comment"># Multiple return (returns tuple)</span>
+<span class="kw">def</span> <span class="fn">min_max</span>(lst): <span class="kw">return</span> <span class="fn">min</span>(lst), <span class="fn">max</span>(lst)
+lo, hi = min_max([<span class="num">3</span>, <span class="num">1</span>, <span class="num">9</span>])</pre>
+    <div class="note"><strong>LEGB Scope:</strong> Local → Enclosing → Global → Built-in. Use <code>global x</code> to modify globals inside a function, <code>nonlocal x</code> for enclosing scope.</div>
+  </div>
+
+  <!-- 12 LAMBDA -->
+  <div class="section" id="s12">
+    <div class="section-header">
+      <div class="section-num">12</div>
+      <div class="section-title">
+        <h3>Lambda Functions</h3>
+        <p>Anonymous single-expression functions · best for short throwaway use</p>
+      </div>
+    </div>
+    <pre>square = <span class="kw">lambda</span> x: x ** <span class="num">2</span>
+add    = <span class="kw">lambda</span> a, b: a + b
+
+<span class="comment"># Sort by score using lambda key</span>
+students = [(<span class="str">'Sam'</span>, <span class="num">90</span>), (<span class="str">'Alex'</span>, <span class="num">85</span>), (<span class="str">'Priya'</span>, <span class="num">92</span>)]
+students.sort(key=<span class="kw">lambda</span> s: s[<span class="num">1</span>])
+
+<span class="comment"># map / filter / reduce</span>
+nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+squares = <span class="fn">list</span>(<span class="fn">map</span>(<span class="kw">lambda</span> x: x**<span class="num">2</span>, nums))
+evens   = <span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> x: x%<span class="num">2</span>==<span class="num">0</span>, nums))
+
+<span class="kw">from</span> functools <span class="kw">import</span> reduce
+product = reduce(<span class="kw">lambda</span> a, b: a*b, nums)  <span class="comment"># 120</span></pre>
+  </div>
+
+  <!-- 13 MODULES -->
+  <div class="section" id="s13">
+    <div class="section-header">
+      <div class="section-num">13</div>
+      <div class="section-title">
+        <h3>Modules & Packages</h3>
+        <p>import · from · alias · __name__ guard · pip</p>
+      </div>
+    </div>
+    <pre><span class="kw">import</span> math
+<span class="fn">print</span>(math.sqrt(<span class="num">16</span>))      <span class="comment"># 4.0</span>
+
+<span class="kw">from</span> math <span class="kw">import</span> pi, ceil  <span class="comment"># specific names</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np         <span class="comment"># alias</span>
+
+<span class="comment"># Guard — prevents running on import</span>
+<span class="kw">if</span> __name__ == <span class="str">'__main__'</span>:
+    <span class="fn">print</span>(<span class="str">'Running directly'</span>)
+
+<span class="comment"># pip commands</span>
+<span class="comment"># pip install numpy pandas matplotlib</span>
+<span class="comment"># pip freeze > requirements.txt</span>
+<span class="comment"># pip install -r requirements.txt</span></pre>
+  </div>
+
+  <!-- 14 FILES -->
+  <div class="section" id="s14">
+    <div class="section-header">
+      <div class="section-num">14</div>
+      <div class="section-title">
+        <h3>File Handling</h3>
+        <p>open() · context manager · text & binary · JSON · CSV · pathlib</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4>File Modes</h4>
+      <table class="data-table">
+        <tr><th>Mode</th><th>Meaning</th><th>File must exist?</th></tr>
+        <tr><td>'r'</td><td>Read only (default)</td><td><span class="tag green">Yes</span></td></tr>
+        <tr><td>'w'</td><td>Write — creates/overwrites</td><td><span class="tag">No</span></td></tr>
+        <tr><td>'a'</td><td>Append — adds to end</td><td><span class="tag">No</span></td></tr>
+        <tr><td>'x'</td><td>Create — fails if exists</td><td><span class="tag">No</span></td></tr>
+        <tr><td>'rb' / 'wb'</td><td>Binary read / write</td><td>—</td></tr>
+      </table>
+    </div>
+    <pre><span class="comment"># Always use 'with' — auto-closes file</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">'notes.txt'</span>, <span class="str">'w'</span>) <span class="kw">as</span> f:
+    f.write(<span class="str">'Python Notes\n'</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">'notes.txt'</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> line <span class="kw">in</span> f:        <span class="comment"># memory-efficient</span>
+        <span class="fn">print</span>(line.strip())
+
+<span class="comment"># JSON</span>
+<span class="kw">import</span> json
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">'data.json'</span>, <span class="str">'w'</span>) <span class="kw">as</span> f:
+    json.dump({<span class="str">'name'</span>: <span class="str">'Sam'</span>}, f, indent=<span class="num">4</span>)
+
+<span class="comment"># pathlib (modern OOP approach)</span>
+<span class="kw">from</span> pathlib <span class="kw">import</span> Path
+p = Path(<span class="str">'notes.txt'</span>)
+p.read_text(); p.write_text(<span class="str">'Hello'</span>)</pre>
+  </div>
+
+  <!-- 15 EXCEPTIONS -->
+  <div class="section" id="s15">
+    <div class="section-header">
+      <div class="section-num">15</div>
+      <div class="section-title">
+        <h3>Exception Handling</h3>
+        <p>try · except · else · finally · raise · custom exceptions</p>
+      </div>
+    </div>
+    <pre><span class="kw">try</span>:
+    x = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">'Enter: '</span>))
+    <span class="fn">print</span>(<span class="num">100</span> / x)
+<span class="kw">except</span> ValueError:
+    <span class="fn">print</span>(<span class="str">'Not a number'</span>)
+<span class="kw">except</span> ZeroDivisionError:
+    <span class="fn">print</span>(<span class="str">'Cannot divide by zero'</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">'Success!'</span>)          <span class="comment"># no exception</span>
+<span class="kw">finally</span>:
+    <span class="fn">print</span>(<span class="str">'Always runs — cleanup'</span>)
+
+<span class="comment"># Custom exception</span>
+<span class="kw">class</span> <span class="fn">InsufficientFundsError</span>(Exception):
+    <span class="kw">def</span> __init__(self, amount, balance):
+        <span class="fn">super</span>().__init__(<span class="str">f'Need {amount}, have {balance}'</span>)</pre>
+    <div class="card">
+      <h4>Common Exceptions</h4>
+      <table class="data-table">
+        <tr><th>Exception</th><th>Common Cause</th></tr>
+        <tr><td>ZeroDivisionError</td><td>x / 0</td></tr>
+        <tr><td>TypeError</td><td>'2' + 2</td></tr>
+        <tr><td>ValueError</td><td>int('hello')</td></tr>
+        <tr><td>IndexError</td><td>list[99] out of range</td></tr>
+        <tr><td>KeyError</td><td>dict['missing']</td></tr>
+        <tr><td>FileNotFoundError</td><td>open('ghost.txt')</td></tr>
+        <tr><td>AttributeError</td><td>None.strip()</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 16 OOP -->
+  <div class="section" id="s16">
+    <div class="section-header">
+      <div class="section-num">16</div>
+      <div class="section-title">
+        <h3>Object-Oriented Programming</h3>
+        <p>Classes · inheritance · polymorphism · encapsulation · dunder methods</p>
+      </div>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar-card"><div class="pillar-icon">🔒</div><div class="pillar-name">Encapsulation</div><div class="pillar-desc">Hide internal state</div></div>
+      <div class="pillar-card"><div class="pillar-icon">🧩</div><div class="pillar-name">Abstraction</div><div class="pillar-desc">Expose only interface</div></div>
+      <div class="pillar-card"><div class="pillar-icon">🧬</div><div class="pillar-name">Inheritance</div><div class="pillar-desc">Reuse parent class</div></div>
+      <div class="pillar-card"><div class="pillar-icon">🔀</div><div class="pillar-name">Polymorphism</div><div class="pillar-desc">Same interface, diff behaviour</div></div>
+    </div>
+    <pre><span class="kw">class</span> <span class="fn">Student</span>:
+    school = <span class="str">'ABC College'</span>  <span class="comment"># class variable</span>
+
+    <span class="kw">def</span> __init__(self, name, gpa):
+        self.name = name       <span class="comment"># instance variable</span>
+        self.gpa  = gpa
+
+    <span class="kw">def</span> greet(self):
+        <span class="kw">return</span> <span class="str">f'Hi, I am {self.name}'</span>
+
+    <span class="kw">@property</span>
+    <span class="kw">def</span> grade(self): <span class="kw">return</span> <span class="str">'A'</span> <span class="kw">if</span> self.gpa >= <span class="num">9</span> <span class="kw">else</span> <span class="str">'B'</span>
+
+    <span class="kw">@classmethod</span>
+    <span class="kw">def</span> from_string(cls, data):
+        name, gpa = data.split(<span class="str">','</span>)
+        <span class="kw">return</span> cls(name, <span class="fn">float</span>(gpa))
+
+    <span class="kw">@staticmethod</span>
+    <span class="kw">def</span> is_passing(gpa): <span class="kw">return</span> gpa >= <span class="num">5.0</span>
+
+    <span class="kw">def</span> __str__(self):  <span class="kw">return</span> <span class="str">f'Student({self.name})'</span>
+    <span class="kw">def</span> __eq__(self, o): <span class="kw">return</span> self.name == o.name
+
+<span class="comment"># Inheritance</span>
+<span class="kw">class</span> <span class="fn">GradStudent</span>(Student):
+    <span class="kw">def</span> __init__(self, name, gpa, thesis):
+        <span class="fn">super</span>().__init__(name, gpa)
+        self.thesis = thesis
+
+    <span class="kw">def</span> greet(self):   <span class="comment"># override</span>
+        <span class="kw">return</span> <span class="fn">super</span>().greet() + <span class="str">f', Thesis: {self.thesis}'</span></pre>
+  </div>
+
+  <!-- 17 ITERATORS -->
+  <div class="section" id="s17">
+    <div class="section-header">
+      <div class="section-num">17</div>
+      <div class="section-title">
+        <h3>Iterators & Generators</h3>
+        <p>__iter__ · __next__ · yield · lazy evaluation · memory-efficient</p>
+      </div>
+    </div>
+    <pre><span class="comment"># Generator function — lazy, memory-efficient</span>
+<span class="kw">def</span> <span class="fn">fibonacci</span>(n):
+    a, b = <span class="num">0</span>, <span class="num">1</span>
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n):
+        <span class="kw">yield</span> a          <span class="comment"># suspend, return value</span>
+        a, b = b, a + b
+
+<span class="kw">for</span> num <span class="kw">in</span> fibonacci(<span class="num">10</span>):
+    <span class="fn">print</span>(num, end=<span class="str">' '</span>)  <span class="comment"># 0 1 1 2 3 5 8 13 21 34</span>
+
+<span class="comment"># Generator expression — no memory stored</span>
+gen = (x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1_000_000</span>))
+<span class="fn">print</span>(<span class="fn">sum</span>(gen))  <span class="comment"># computed on demand!</span></pre>
+  </div>
+
+  <!-- 18 DECORATORS -->
+  <div class="section" id="s18">
+    <div class="section-header">
+      <div class="section-num">18</div>
+      <div class="section-title">
+        <h3>Decorators</h3>
+        <p>Higher-order functions · @syntax · functools.wraps · lru_cache</p>
+      </div>
+    </div>
+    <pre><span class="kw">import</span> functools, time
+
+<span class="kw">def</span> <span class="fn">timer</span>(func):
+    <span class="kw">@functools</span>.wraps(func)   <span class="comment"># preserve metadata</span>
+    <span class="kw">def</span> wrapper(*args, **kwargs):
+        start  = time.perf_counter()
+        result = func(*args, **kwargs)
+        <span class="fn">print</span>(<span class="str">f'{func.__name__} took {time.perf_counter()-start:.4f}s'</span>)
+        <span class="kw">return</span> result
+    <span class="kw">return</span> wrapper
+
+<span class="kw">@timer</span>
+<span class="kw">def</span> <span class="fn">slow_fn</span>(): time.sleep(<span class="num">0.1</span>)
+
+<span class="comment"># Decorator with args</span>
+<span class="kw">def</span> <span class="fn">repeat</span>(n):
+    <span class="kw">def</span> decorator(func):
+        <span class="kw">@functools</span>.wraps(func)
+        <span class="kw">def</span> wrapper(*a, **kw):
+            <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(n): func(*a, **kw)
+        <span class="kw">return</span> wrapper
+    <span class="kw">return</span> decorator
+
+<span class="comment"># memoisation</span>
+<span class="kw">@functools</span>.lru_cache(maxsize=<span class="num">128</span>)
+<span class="kw">def</span> <span class="fn">fib</span>(n): <span class="kw">return</span> n <span class="kw">if</span> n < <span class="num">2</span> <span class="kw">else</span> fib(n-<span class="num">1</span>) + fib(n-<span class="num">2</span>)</pre>
+  </div>
+
+  <!-- 19 COMPREHENSIONS -->
+  <div class="section" id="s19">
+    <div class="section-header">
+      <div class="section-num">19</div>
+      <div class="section-title">
+        <h3>Comprehensions</h3>
+        <p>List · dict · set · generator · concise and bytecode-optimised</p>
+      </div>
+    </div>
+    <pre><span class="comment"># List comprehension</span>
+squares = [x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>)]
+evens   = [x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">20</span>) <span class="kw">if</span> x % <span class="num">2</span> == <span class="num">0</span>]
+
+<span class="comment"># Flatten nested</span>
+flat = [x <span class="kw">for</span> row <span class="kw">in</span> [[<span class="num">1</span>,<span class="num">2</span>],[<span class="num">3</span>,<span class="num">4</span>]] <span class="kw">for</span> x <span class="kw">in</span> row]
+
+<span class="comment"># Dict comprehension</span>
+lengths = {w: <span class="fn">len</span>(w) <span class="kw">for</span> w <span class="kw">in</span> [<span class="str">'cat'</span>, <span class="str">'dog'</span>]}
+inv_d   = {v: k <span class="kw">for</span> k, v <span class="kw">in</span> d.items()}
+
+<span class="comment"># Set comprehension</span>
+unique = {x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> [-<span class="num">2</span>, -<span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>]}  <span class="comment"># {0,1,4}</span>
+
+<span class="comment"># Generator (lazy — no brackets)</span>
+gen = (x**<span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1_000_000</span>))</pre>
+  </div>
+
+  <!-- 20 REGEX -->
+  <div class="section" id="s20">
+    <div class="section-header">
+      <div class="section-num">20</div>
+      <div class="section-title">
+        <h3>Regular Expressions</h3>
+        <p>re module · search · findall · sub · groups · always use raw strings</p>
+      </div>
+    </div>
+    <pre><span class="kw">import</span> re
+text = <span class="str">'email: sameeksha@gmail.com, phone: 9876543210'</span>
+
+re.search(<span class="str">r'\d{10}'</span>, text).group()           <span class="comment"># 9876543210</span>
+re.findall(<span class="str">r'[\w.-]+@[\w.-]+\.\w+'</span>, text)    <span class="comment"># emails</span>
+re.sub(<span class="str">r'\d+'</span>, <span class="str">'***'</span>, text)                  <span class="comment"># mask numbers</span>
+re.split(<span class="str">r'[,;\s]+'</span>, text)                   <span class="comment"># split</span>
+
+<span class="comment"># Named groups</span>
+m = re.search(<span class="str">r'(?P&lt;user&gt;\w+)@(?P&lt;domain&gt;\w+)'</span>, text)
+m.group(<span class="str">'user'</span>)   <span class="comment"># 'sameeksha'</span></pre>
+    <div class="card">
+      <h4>Quick Reference</h4>
+      <table class="data-table">
+        <tr><th>Pattern</th><th>Matches</th></tr>
+        <tr><td>\d / \D</td><td>Digit / Non-digit</td></tr>
+        <tr><td>\w / \W</td><td>Word char [a-zA-Z0-9_] / Non-word</td></tr>
+        <tr><td>\s / \S</td><td>Whitespace / Non-whitespace</td></tr>
+        <tr><td>^ / $</td><td>Start / End of string</td></tr>
+        <tr><td>* / + / ?</td><td>0+ / 1+ / 0 or 1 occurrences</td></tr>
+        <tr><td>{n} / {m,n}</td><td>Exactly n / between m and n</td></tr>
+        <tr><td>(abc)</td><td>Capture group</td></tr>
+        <tr><td>(?P&lt;name&gt;...)</td><td>Named capture group</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 21 BUILTINS -->
+  <div class="section" id="s21">
+    <div class="section-header">
+      <div class="section-num">21</div>
+      <div class="section-title">
+        <h3>Important Built-in Functions</h3>
+        <p>70+ functions always available — no import needed</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4>Essential Built-ins</h4>
+      <table class="data-table">
+        <tr><th>Function</th><th>Purpose & Example</th></tr>
+        <tr><td>len(x)</td><td>len([1,2,3]) → 3</td></tr>
+        <tr><td>range(start,stop,step)</td><td>range(1,10,2) → 1,3,5,7,9</td></tr>
+        <tr><td>type(x) / isinstance(x,T)</td><td>isinstance([], list) → True</td></tr>
+        <tr><td>sorted(x, key, reverse)</td><td>Returns new sorted list</td></tr>
+        <tr><td>enumerate(x)</td><td>→ (0,'a'),(1,'b')...</td></tr>
+        <tr><td>zip(*iters)</td><td>zip([1,2],[3,4]) → (1,3),(2,4)</td></tr>
+        <tr><td>map(f, iter)</td><td>Apply f to each element</td></tr>
+        <tr><td>filter(f, iter)</td><td>Keep where f returns True</td></tr>
+        <tr><td>any(iter) / all(iter)</td><td>any([0,1,0]) → True</td></tr>
+        <tr><td>min() / max() / sum()</td><td>sum([1,2,3]) → 6</td></tr>
+        <tr><td>abs() / round(x,n)</td><td>abs(-5)→5, round(3.14,1)→3.1</td></tr>
+        <tr><td>dir(obj) / help(obj)</td><td>Introspection tools</td></tr>
+        <tr><td>chr(n) / ord(c)</td><td>chr(65)→'A', ord('A')→65</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 22 STDLIB -->
+  <div class="section" id="s22">
+    <div class="section-header">
+      <div class="section-num">22</div>
+      <div class="section-title">
+        <h3>Common Standard Libraries</h3>
+        <p>Batteries included — no pip required</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4>Key Modules</h4>
+      <table class="data-table">
+        <tr><th>Module</th><th>Key Features</th></tr>
+        <tr><td>os / sys</td><td>Paths, env vars, argv, exit()</td></tr>
+        <tr><td>pathlib</td><td>OOP paths — Path('dir/file.txt')</td></tr>
+        <tr><td>math</td><td>sqrt, pi, factorial, log, gcd</td></tr>
+        <tr><td>random</td><td>random(), randint(), choice(), shuffle()</td></tr>
+        <tr><td>datetime</td><td>date, time, datetime, timedelta</td></tr>
+        <tr><td>json / csv</td><td>Parse/write JSON and CSV files</td></tr>
+        <tr><td>collections</td><td>Counter, defaultdict, deque, namedtuple</td></tr>
+        <tr><td>itertools</td><td>chain, product, permutations, combinations</td></tr>
+        <tr><td>functools</td><td>reduce, partial, wraps, lru_cache</td></tr>
+        <tr><td>re</td><td>Regular expressions</td></tr>
+        <tr><td>threading / multiprocessing</td><td>Concurrency & parallelism</td></tr>
+        <tr><td>asyncio</td><td>async/await, event loop, coroutines</td></tr>
+        <tr><td>logging</td><td>DEBUG, INFO, WARNING, ERROR levels</td></tr>
+        <tr><td>dataclasses</td><td>@dataclass — auto __init__, __repr__</td></tr>
+        <tr><td>typing</td><td>List, Dict, Optional, Union, Tuple, Any</td></tr>
+        <tr><td>unittest</td><td>Built-in testing framework</td></tr>
+      </table>
+    </div>
+    <pre><span class="comment"># datetime</span>
+<span class="kw">from</span> datetime <span class="kw">import</span> datetime, timedelta
+now = datetime.now()
+<span class="fn">print</span>(now.strftime(<span class="str">'%d/%m/%Y %H:%M'</span>))
+tomorrow = now + timedelta(days=<span class="num">1</span>)
+
+<span class="comment"># collections.Counter</span>
+<span class="kw">from</span> collections <span class="kw">import</span> Counter
+c = Counter(<span class="str">'Sameeksha'</span>)
+c.most_common(<span class="num">3</span>)  <span class="comment"># top 3 chars</span>
+
+<span class="comment"># dataclasses</span>
+<span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+<span class="kw">@dataclass</span>
+<span class="kw">class</span> <span class="fn">Point</span>:
+    x: float; y: float
+p = Point(<span class="num">3.0</span>, <span class="num">4.0</span>)  <span class="comment"># auto __init__</span></pre>
+  </div>
+
+  <!-- BEST PRACTICES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num" style="color: rgba(167,139,250,0.2);">✦</div>
+      <div class="section-title">
+        <h3>Python Best Practices</h3>
+        <p>Write code that's clean, readable, and Pythonic</p>
+      </div>
+    </div>
+    <div class="bp-grid">
+      <div class="bp-card"><h5>PEP 8</h5><p>4 spaces, snake_case names, 79-char lines — follow the style guide consistently.</p></div>
+      <div class="bp-card"><h5>f-strings</h5><p>Prefer f-strings over .format() — faster, cleaner, and more readable.</p></div>
+      <div class="bp-card"><h5>Context Managers</h5><p>Always use <code>with open()</code> — auto-closes file even on exceptions.</p></div>
+      <div class="bp-card"><h5>Specific Exceptions</h5><p>Catch specific exceptions, never a bare <code>except:</code> — it swallows KeyboardInterrupt.</p></div>
+      <div class="bp-card"><h5>Comprehensions</h5><p>Prefer list/dict comprehensions over manual loops — faster and more Pythonic.</p></div>
+      <div class="bp-card"><h5>Type Hints</h5><p>Add type hints (PEP 484) — better IDE support, documentation, and tooling.</p></div>
+      <div class="bp-card"><h5>DRY Principle</h5><p>Don't Repeat Yourself — extract repeated logic into reusable functions.</p></div>
+      <div class="bp-card"><h5>Virtual Envs</h5><p>Use <code>venv</code> per project to isolate dependencies cleanly.</p></div>
+      <div class="bp-card"><h5>EAFP over LBYL</h5><p>Python favours "easier to ask forgiveness" — try/except over pre-checking.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div>Python Notes · Made with ❤️ by <span>Sameeksha</span> · GitHub Edition · 2026</div>
+  <div style="margin-top:8px; opacity:0.5;">Beginner → Intermediate → Advanced</div>
+</footer>
+
+</body>
+</html>
